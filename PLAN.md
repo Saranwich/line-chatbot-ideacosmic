@@ -6,8 +6,8 @@ A professional-grade LINE Chatbot designed to help users manage tasks and receiv
 ## 🗺️ 2. The Master Roadmap
 
 ### Phase 1: The Architect (Database & MVC Design)
-- [ ] Define PostgreSQL Schema (Users, Tasks, Reminders, Locations).
-- [ ] Design Data Storing Approaches (Handling repeating tasks, image storage).
+- [x] Define PostgreSQL Schema (Users, Tasks, Reminders, Locations).
+- [x] Design Data Storing Approaches (Handling repeating tasks, image storage).
 - [ ] Establish MVC folder structure.
 
 ### Phase 2: The Foundation (Postgres & Core Backend)
@@ -34,27 +34,32 @@ A professional-grade LINE Chatbot designed to help users manage tasks and receiv
 ## 🗄️ 4. Database Schema (Draft)
 
 ### Tables (Conceptual)
-1. **`users`**
-   - `id`: Internal Primary Key.
-   - `line_user_id`: The unique ID from LINE.
-   - `display_name`: User's name.
-   - `timezone`: Crucial for "8:00 AM" to mean the *user's* 8:00 AM.
-   - `created_at`: Metadata.
+```dbml
+Table users {
+  id integer [primary key]
+  line_user_id varchar [unique]
+  display_name varchar
+  timezone varchar [default: 'Asia/Bangkok']
+  created_at timestamp [default: `now()`]
+}
 
-2. **`tasks`**
-   - `id`: Internal Primary Key.
-   - `user_id`: Foreign Key to `users`.
-   - `title`: The "What" (e.g., "Buy Milk").
-   - `status`: 'OPEN' (Active) or 'CLOSED' (Marked as done, no more reminders).
-   - `image_url`: Link to an image (if attached).
+Table tasks {
+  id integer [primary key]
+  user_id integer [ref: > users.id]
+  title varchar
+  status varchar [default: 'OPEN']
+  image_url varchar [note: 'Link to storage bucket']
+}
 
-3. **`reminders`**
-   - `id`: Internal Primary Key.
-   - `task_id`: Foreign Key to `tasks`.
-   - `remind_time`: The specific time (e.g., 08:00).
-   - `is_active`: Boolean (True = Bot keeps reminding, False = User sent "Stop").
-   - `repeat_days`: String (e.g., "1,2,3,4,5,6,7" for daily).
-   - `last_sent_at`: Timestamp (Used by the background worker to avoid double-sending).
+Table reminders {
+  id integer [primary key]
+  task_id integer [ref: > tasks.id]
+  remind_time time
+  is_active boolean [default: true]
+  repeat_days varchar [note: 'e.g. 1,2,3 for Mon,Tue,Wed']
+  last_sent_at timestamp
+}
+```
 
 ---
 *Last Updated: 2025-03-09*
