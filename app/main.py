@@ -1,5 +1,6 @@
 import os
 import uvicorn
+import config
 
 from dotenv import load_dotenv
 
@@ -25,10 +26,10 @@ app = FastAPI()
 load_dotenv(override=True)
 
 # LINE Access Key
-get_access_token = os.getenv('LINE_CHANNEL_ACCESS_TOKEN')
+get_access_token = config.LINE_CHANNEL_ACCESS_TOKEN
 configuration = Configuration(access_token=get_access_token)
 # LINE Secret Key
-get_channel_secret = os.getenv('LINE_CHANNEL_SECRET')
+get_channel_secret = config.LINE_CHANNEL_SECRET
 handler = WebhookHandler(channel_secret=get_channel_secret)
 
 @app.post("/callback")
