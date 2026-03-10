@@ -1,6 +1,6 @@
 import os
 import uvicorn
-import config
+from app import config
 
 from dotenv import load_dotenv
 
@@ -19,9 +19,18 @@ from linebot.v3.messaging import (
     # FlexMessage, 
     # Emoji,
 )
+from app.database import init_db
 
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app:FastAPI):
+    print(f"String building the table...")
+    init_db()
+    yield
+    print(f"Shutting down")
+
+app = FastAPI(lifespan=lifespan)
 
 load_dotenv(override=True)
 
