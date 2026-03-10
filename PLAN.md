@@ -8,15 +8,15 @@ A professional-grade LINE Chatbot designed to help users manage tasks and receiv
 ### Phase 1: The Architect (Database & MVC Design)
 - [x] Define PostgreSQL Schema (Users, Tasks, Reminders, Locations).
 - [x] Design Data Storing Approaches (Handling repeating tasks, image storage).
-- [ ] Establish MVC folder structure.
+- [x] Establish MVC folder structure.
 
 ### Phase 2: The Foundation (Postgres & Core Backend)
-- [ ] Set up PostgreSQL with SQLAlchemy/SQLModel.
+- [x] Set up PostgreSQL with SQLAlchemy/SQLModel. (Connection & Tables are LIVE! 🚀)
 - [ ] Implement Database Migrations with Alembic.
 - [ ] Build `TaskService` (Core CRUD logic independent of LINE).
 
 ### Phase 3: The Messenger (LINE Integration)
-- [ ] Implement FastAPI Webhook with Signature Validation.
+- [x] Implement FastAPI Webhook with Signature Validation.
 - [ ] Build the **Dispatcher** to route incoming events.
 - [ ] Create Text, Image, and Location Handlers.
 - [ ] Design Flex Message UI for Task Dashboard.
@@ -26,10 +26,15 @@ A professional-grade LINE Chatbot designed to help users manage tasks and receiv
 - [ ] Handle Timezones (`pytz`) for accurate reminders.
 - [ ] Implement Geo-spatial logic for location-based tagging.
 
-## 📍 3. Current Focus
-**Step 1.1: Designing the Database Schema (ERD)**
-- Defining tables for Users, Tasks, and Reminders.
-- Deciding on the "Repeating Task" data structure.
+## 📍 3. Current Status (Updated: 2026-03-10)
+**Where you are:**
+- **The Body is Ready:** Database tables (`users`, `tasks`, `reminders`) exist on your SSD.
+- **The Bridge is Built:** Python can talk to Postgres via the `lifespan` manager.
+
+**Next Learning Challenges (For Tomorrow):**
+1. **The First Record:** ทดลองเขียนข้อมูลผู้ใช้คนแรก (User) ลงไปในตารางเมื่อมีคนทัก LINE มา
+2. **The Logic (Service):** สร้าง `TaskService` เพื่อจัดการข้อมูลโดยไม่ต้องเขียน SQL เองบ่อยๆ
+
 
 ## 🗄️ 4. Database Schema (Draft)
 
