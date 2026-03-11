@@ -20,6 +20,7 @@ from linebot.v3.messaging import (
     # Emoji,
 )
 from app.database import init_db
+from app.handlers.message_handler import process_text_message
 
 from contextlib import asynccontextmanager
 
@@ -55,17 +56,8 @@ async def callback(request: Request, x_line_signature: str = Header(None)):
 
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event: MessageEvent):
-    with ApiClient(configuration) as api_client:
-        line_bot_api = MessagingApi(api_client)
-
-        reply_message = "Hello from Dev Environment"
-
-        line_bot_api.reply_message(
-            ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text=reply_message)]
-            )
-        )
+    
+    process_text_message(event, configuration)
 
 
 if __name__ == "__main__":
