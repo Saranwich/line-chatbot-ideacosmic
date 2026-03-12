@@ -8,7 +8,10 @@ from fastapi import FastAPI, Request, HTTPException, Header
 
 from linebot.v3 import WebhookHandler
 from linebot.v3.exceptions import InvalidSignatureError
-from linebot.v3.webhooks import MessageEvent, TextMessageContent
+from linebot.v3.webhooks import (
+    MessageEvent, 
+    TextMessageContent,
+    FollowEvent)
 
 from linebot.v3.messaging import (
     ApiClient, 
@@ -21,6 +24,7 @@ from linebot.v3.messaging import (
 )
 from app.database import init_db
 from app.handlers.message_handler import process_text_message
+from app.handlers.follow_handler import process_follow_message
 
 from contextlib import asynccontextmanager
 
@@ -58,6 +62,10 @@ async def callback(request: Request, x_line_signature: str = Header(None)):
 def handle_message(event: MessageEvent):
     
     process_text_message(event, configuration)
+    
+@handler.add(FollowEvent)
+def handle_follow(event: MessageEvent):
+    process_follow_message(event, configuration)
 
 
 if __name__ == "__main__":
