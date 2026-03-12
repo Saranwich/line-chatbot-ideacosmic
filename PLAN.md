@@ -6,20 +6,22 @@ A professional-grade LINE Chatbot designed to help users manage tasks and receiv
 ## 🗺️ 2. The Master Roadmap
 
 ### Phase 1: The Architect (Database & MVC Design)
-- [x] Define PostgreSQL Schema (Users, Tasks, Reminders, Locations).
-- [x] Design Data Storing Approaches (Handling repeating tasks, image storage).
+- [x] Define PostgreSQL Schema (Users, Tasks, Reminders).
+- [x] Design Data Storing Approaches (Handling repeating tasks).
 - [x] Establish MVC folder structure.
 
 ### Phase 2: The Foundation (Postgres & Core Backend)
 - [x] Set up PostgreSQL with SQLAlchemy/SQLModel. (Connection & Tables are LIVE! 🚀)
 - [ ] Implement Database Migrations with Alembic.
-- [ ] Build `TaskService` (Core CRUD logic independent of LINE).
-- [x] Build `UserService` (Core CRUD logic for Users) and Database Testing setup.
+- [x] Build `TaskService` (Full CRUD: Create, Read, Update, Delete). ✅
+- [x] Build `UserService` (Core CRUD logic for Users). ✅
+- [x] Set up Professional Testing Suite (Centralized `test_utils.py` and separate CRUD tests). ✅
 
 ### Phase 3: The Messenger (LINE Integration)
-- [x] Implement FastAPI Webhook with Signature Validation.
-- [x] Build the **Dispatcher** to route incoming events (Moved logic to `handlers/`).
-- [ ] Create Text, Image, and Location Handlers. (Text Handler in progress 🚀)
+- [x] Implement FastAPI Webhook with Signature Validation. ✅
+- [x] Implement `FollowEvent` (Add Friend) logic. ✅
+- [ ] Build a **Smart Dispatcher** using a Dictionary/Map to route commands (Planned for Tomorrow! 🧠).
+- [ ] Implement Text Handlers for "Add" and "List" commands.
 - [ ] Design Flex Message UI for Task Dashboard.
 
 ### Phase 4: The "Hell" (Background Tasks & Geo-Logic)
@@ -29,45 +31,21 @@ A professional-grade LINE Chatbot designed to help users manage tasks and receiv
 
 ## 📍 3. Current Status (Updated: 2026-03-12)
 **Where you are:**
-- **The Body is Ready:** Database tables (`users`, `tasks`, `reminders`) exist on your SSD.
-- **The Bridge is Built:** Python can talk to Postgres via the `lifespan` manager.
-- **The Engine is Running:** Database Testing is configured (`TEST_DATABASE_URL`).
-- **The Brain is Thinking:** `UserService` (Business Logic) and `message_handler` (MVC Architecture) are implemented and tested!
+- **The Brain is Strong:** `TaskService` and `UserService` are fully functional and tested independently.
+- **The Laboratory is Clean:** You have a professional test environment (`tests/test_utils.py`) that resets the DB for every test.
+- **The Bridge is Open:** `FollowEvent` and `MessageEvent` are correctly received from LINE.
 
 **Next Learning Challenges (For Tomorrow):**
-1. **Connect the Dots:** นำ `UserService` ที่เขียนเสร็จแล้ว ไปเรียกใช้จริงใน `message_handler.py` เพื่อบันทึกผู้ใช้ลง Database ทันทีที่เขาทักบอทมา
-2. **The Task Logic (Service):** สร้าง `TaskService` เพื่อจัดการข้อมูล Task แบบเดียวกับที่เราทำกับ `UserService`
+1. **The Smart Dispatcher:** Refactor `message_handler.py` to use a **Dictionary-based Command Map** (the "Pro" way you designed!).
+2. **The Session Bridge:** Update `main.py` to correctly inject the database session into the handlers.
+3. **Integration Test:** Perform the first "Real-World" test by adding a task through the LINE chat.
 
+## 🗄️ 4. Database Schema (Live State)
 
-## 🗄️ 4. Database Schema (Draft)
-
-### Tables (Conceptual)
-```dbml
-Table users {
-  id integer [primary key]
-  line_user_id varchar [unique]
-  display_name varchar
-  timezone varchar [default: 'Asia/Bangkok']
-  created_at timestamp [default: `now()`]
-}
-
-Table tasks {
-  id integer [primary key]
-  user_id integer [ref: > users.id]
-  title varchar
-  status varchar [default: 'OPEN']
-  image_url varchar [note: 'Link to storage bucket']
-}
-
-Table reminders {
-  id integer [primary key]
-  task_id integer [ref: > tasks.id]
-  remind_time time
-  is_active boolean [default: true]
-  repeat_days varchar [note: 'e.g. 1,2,3 for Mon,Tue,Wed']
-  last_sent_at timestamp
-}
-```
+### Tables
+- **users**: Stores LINE IDs and display names.
+- **tasks**: Stores user tasks with statuses (OPEN, CLOSED).
+- **reminders**: (Schema defined, logic pending).
 
 ---
-*Last Updated: 2026-03-12*
+*Last Updated: 2026-03-12 (Night)*
